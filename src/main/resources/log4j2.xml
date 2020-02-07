@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Appenders>
+
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%5p [%t] - %m%n" />
+		</Console>
+
+		<File name="File" fileName="./logs/gradle_jdbc_study_file.log" append="true">
+			<PatternLayout
+				pattern="[%-5level] [%d{yyyy-MM-dd HH:mm:ss}] %m%n" />
+		</File>
+
+	</Appenders>
+	<Loggers>
+		<Logger name="gradle_jdbc_study" level="trace" additivity="false">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="File" />
+		</Logger>
+	</Loggers>
+
+</Configuration>
+   
