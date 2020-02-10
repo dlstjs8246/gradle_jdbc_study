@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tm:TermDictionary xmlns:tm="http://exerd.com/term-model" version="1.1">
+  <term name="번호" physicalName="no"/>
+  <term name="명" physicalName="name">
+    <synonyms>이름</synonyms>
+  </term>
+  <term name="사원" physicalName="employee">
+    <physicalSynonyms>emp</physicalSynonyms>
+  </term>
+  <term name="직책" physicalName="title"/>
+  <term name="직속상사" physicalName="manager"/>
+  <term name="부서" physicalName="department">
+    <physicalSynonyms>dept</physicalSynonyms>
+  </term>
+  <term name="증명사진" physicalName="pic"/>
+  <term name="위치" physicalName="floor"/>
+  <term name="급여" physicalName="salary"/>
+  <term name="비밀번호" description="해시함수로 단방향 암호화" physicalName="pass" physicalDescription="해시함수로 단방향 암호화">
+    <physicalSynonyms>passwd</physicalSynonyms>
+  </term>
+</tm:TermDictionary>
