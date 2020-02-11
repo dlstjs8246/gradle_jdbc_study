@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'eclipse'
+    id 'application'
 }
 
 sourceCompatibility = 1.8
@@ -20,5 +21,17 @@ dependencies {
 	compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.0'
 	testCompile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.13.0'
 	compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.48'
+	compile group: 'com.jtattoo', name: 'JTattoo', version: '1.6.13'
     testImplementation 'junit:junit:4.12'
+}
+
+jar{
+    version = 1.0
+    mainClassName = 'gradle_jdbc_study.ui.LoginFrame'
+    baseName = 'Erp'
+    manifest {
+        attributes 'Title': baseName, 'Version' : version, 'Main-Class' : mainClassName
+        
+    }
+    dependsOn configurations.runtime
 }

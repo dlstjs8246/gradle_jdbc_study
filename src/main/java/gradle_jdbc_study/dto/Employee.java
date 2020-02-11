@@ -11,6 +11,7 @@ public class Employee {
 	private Department dept;
 	private Date hireDate;
 	private byte[] pic;
+	private String passwd;
 	public Employee() {
 
 	}
@@ -18,6 +19,7 @@ public class Employee {
 		super();
 		this.empNo = empNo;
 	}
+	
 	public Employee(int empNo, String empName, Title title, Employee manager, int salary, Department dept,
 			Date hireDate) {
 		super();
@@ -40,6 +42,10 @@ public class Employee {
 		this.dept = dept;
 		this.hireDate = hireDate;
 		this.pic = pic;
+	}
+	public Employee(int empNo, String passwd) {
+		this.empNo = empNo;
+		this.passwd = passwd;
 	}
 	public int getEmpNo() {
 		return empNo;
@@ -89,6 +95,10 @@ public class Employee {
 	public void setPic(byte[] pic) {
 		this.pic = pic;
 	}
+	
+	public String getPasswd() {
+		return passwd;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -112,8 +122,15 @@ public class Employee {
 	@Override
 	public String toString() {
 		return String.format(
-				"Employee [%s, %s, %s, %s, %s, %s, %s, %s]", empNo,
-				empName, title.getTitleNo(), manager.getEmpNo(), salary, dept.getDeptNo(), String.format("%1$tF %1tT$",hireDate),pic==null?null:pic.length);
+				"%s, %s, %s, %s, %s, %s, %s, %s%n", 
+				empNo,
+				empName, 
+				title.getTitleNo(), 
+				manager==null?null:manager.getEmpNo(), 
+				salary, 
+				dept.getDeptNo(), 
+				String.format("%1$tF %1tT$",hireDate),
+				pic==null?null:pic.length);
 	}
 	
 }
