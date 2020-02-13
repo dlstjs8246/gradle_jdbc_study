@@ -13,6 +13,7 @@ import javax.swing.JPopupMenu;
 import gradle_jdbc_study.dto.Department;
 import gradle_jdbc_study.dto.Employee;
 import gradle_jdbc_study.ui.content.DepartmentPanel;
+import gradle_jdbc_study.ui.exception.InvalidCheckExcepation;
 import gradle_jdbc_study.ui.list.AbsTblPanel;
 import gradle_jdbc_study.ui.list.DepartmentTblPanel;
 import gradle_jdbc_study.ui.service.DepartmentUIService;
@@ -85,10 +86,12 @@ public class DepartmentUIPanel extends AbsMainPanel<Department> {
 					
 				}
 				if(e.getActionCommand().equals("추가")) {
-					itemList.add(deptPanel.getItem());
-					deptTblPanel.loadData(itemList);
 					try {
+						itemList.add(deptPanel.getItem());
+						deptTblPanel.loadData(itemList);
 						service.insertEmployee(deptPanel.getItem());
+					} catch(InvalidCheckExcepation e1) {
+						JOptionPane.showMessageDialog(null, e1.getMessage());
 					} catch (SQLException e1) {
 						if(e1.getErrorCode()==1062) {
 							JOptionPane.showMessageDialog(null, "부서 번호가 중복");

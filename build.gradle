@@ -23,6 +23,7 @@ dependencies {
 	compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.48'
 	compile group: 'com.jtattoo', name: 'JTattoo', version: '1.6.13'
     testImplementation 'junit:junit:4.12'
+    compile group: 'com.toedter', name: 'jcalendar', version: '1.4'
 }
 
 jar{

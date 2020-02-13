@@ -99,6 +99,10 @@ public class Employee {
 	public String getPasswd() {
 		return passwd;
 	}
+	
+	public void setPasswd(String passwd) {
+		this.passwd = passwd;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -121,16 +125,13 @@ public class Employee {
 	}
 	@Override
 	public String toString() {
-		return String.format(
-				"%s, %s, %s, %s, %s, %s, %s, %s%n", 
-				empNo,
-				empName, 
-				title.getTitleNo(), 
-				manager==null?null:manager.getEmpNo(), 
-				salary, 
-				dept.getDeptNo(), 
-				String.format("%1$tF %1tT$",hireDate),
-				pic==null?null:pic.length);
+		return String.format("%s(%d) - %s", empName,empNo,title.getTitleName());
+		/*
+		 * return String.format( "%s, %s, %s, %s, %s, %s, %s, %s%n", empNo, empName,
+		 * title.getTitleNo(), manager==null?null:manager.getEmpNo(), salary,
+		 * dept.getDeptNo(), String.format("%1$tF %1tT$",hireDate),
+		 * pic==null?null:pic.length);
+		 */
 	}
 	
 }

@@ -1,6 +1,8 @@
 package gradle_jdbc_study.ui.content;
 
 import gradle_jdbc_study.dto.Title;
+import gradle_jdbc_study.ui.exception.InvalidCheckExcepation;
+
 import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -39,6 +41,7 @@ public class TitlePanel extends AbsItemPanel<Title> {
 
 	@Override
 	public Title getItem() {
+		validCheck();
 		int titleNo = Integer.parseInt(tfNo.getText().trim());
 		String titleName = tfName.getText().trim();
 		return new Title(titleNo, titleName);
@@ -54,6 +57,12 @@ public class TitlePanel extends AbsItemPanel<Title> {
 	public void tfClear() {
 		tfNo.setText("");
 		tfName.setText("");
+	}
+	@Override
+	public void validCheck() {
+		if(tfNo.getText().equals("") || tfName.getText().equals("")) {
+			throw new InvalidCheckExcepation();
+		}
 	}
 
 }

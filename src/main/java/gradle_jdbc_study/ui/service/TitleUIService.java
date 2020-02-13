@@ -31,4 +31,7 @@ public class TitleUIService {
 	public void deleteTitle(Title title) throws SQLException {
 		titleDao.deleteTitle(title);
 	}
+	public List<Employee> showTitleByNo(Title title) throws SQLException {
+		return titleDao.showEmployeesGroupByTitleNo(title);
+	}
 }

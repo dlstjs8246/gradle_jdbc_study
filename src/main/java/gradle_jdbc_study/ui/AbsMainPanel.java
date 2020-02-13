@@ -7,7 +7,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
-import gradle_jdbc_study.dto.Department;
 import gradle_jdbc_study.ui.list.AbsTblPanel;
 
 @SuppressWarnings("serial")

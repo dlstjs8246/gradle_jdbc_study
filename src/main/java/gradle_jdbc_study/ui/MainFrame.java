@@ -2,6 +2,9 @@ package gradle_jdbc_study.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -11,7 +14,11 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import gradle_jdbc_study.dto.Department;
+import gradle_jdbc_study.dto.Title;
 import gradle_jdbc_study.ui.content.DepartmentPanel;
+import gradle_jdbc_study.ui.service.EmployeeUIService;
+
 import java.awt.GridLayout;
 
 @SuppressWarnings("serial")
@@ -107,6 +114,24 @@ public class MainFrame extends JFrame implements ActionListener {
 		frame.setVisible(true);
 	}
 	protected void btnEmployeeActionPerformed(ActionEvent e) {
-		
+		JFrame frame = new JFrame();
+		EmployeeUIPanel ep = new EmployeeUIPanel();
+		frame.setBounds(100, 100, 900, 600);
+		EmployeeUIService service = new EmployeeUIService();
+		List<Department> list = service.showDeptList();
+		ep.getEmpPanel().setCmbDeptList(list);
+		ep.getEmpPanel().getCmbDept().addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange() == ItemEvent.SELECTED) {
+					ep.getEmpPanel().setCmbMgnList(service.showManagerList((Department)e.getItem()));
+				}
+			}
+		});
+		List<Title> titleList = service.showTitle();
+		ep.getEmpPanel().setCmbTitleList(titleList);
+		frame.add(ep);
+		frame.setVisible(true);
+		frame.setVisible(true);
 	}
 }

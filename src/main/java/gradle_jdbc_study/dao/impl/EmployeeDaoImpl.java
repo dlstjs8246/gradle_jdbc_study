@@ -61,22 +61,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	}
 
 	@Override
-	public List<Employee> selectEmployeeByAll() {
-		String sql = "select emp_no,emp_name,title,manager,salary,dept,hire_date from employee";
-		List<Employee> lists = new ArrayList<>();
-		try(Connection con = MySqlDataSource.getConnection();
-				PreparedStatement pstmt = con.prepareStatement(sql);
-				ResultSet rs = pstmt.executeQuery()) {
-				while(rs.next()) {
-					lists.add(getEmployee(rs));
-				}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return lists;
-	}
-
-	@Override
 	public int insertEmployee(Employee emp) {
 		String sql = null;
 		isPic = emp.getPic()!=null?true:isPic;
@@ -301,7 +285,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 	@Override
 	public List<Employee> selectGroupByNo(Department dept) {
-		String sql = "select e.emp_no,e.emp_name,e.title,e2.emp_name,e.manager, e.salary, (select d.dept_name from department d where e.dept = d.dept_no) as 'dept_name',e.dept,e.hire_date,e.pic from employee e join employee e2 on e.manager = e2.emp_no where e.dept = ?";
+		String sql = "select e.emp_no,e.emp_name,t.title_no,t.title_name,e2.emp_name,e.manager,e.salary, (select d.dept_name from department d where e.dept = d.dept_no) as 'dept_name',e.dept,e.hire_date,e.pic from employee e left join employee e2 on e.manager = e2.emp_no join title t on e.title = t.title_no where e.dept = ?;";
 		List<Employee> list = new ArrayList<>();
 		try(Connection con = MySqlDataSource.getConnection();
 				PreparedStatement pstmt = con.prepareStatement(sql)) {
@@ -316,23 +300,36 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		}
 		return list;
 	}
+	@Override
+	public List<Employee> selectEmployeeByAll() {
+		String sql = "select e.emp_no,e.emp_name,t.title_no,t.title_name,e2.emp_name,e.manager,e.salary, (select d.dept_name from department d where e.dept = d.dept_no) as 'dept_name',e.dept,e.hire_date,e.pic from employee e left join employee e2 on e.manager = e2.emp_no join title t on e.title = t.title_no";
+		List<Employee> lists = new ArrayList<>();
+		try(Connection con = MySqlDataSource.getConnection();
+				PreparedStatement pstmt = con.prepareStatement(sql);
+				ResultSet rs = pstmt.executeQuery()) {
+				while(rs.next()) {
+					lists.add(getEmployeeGroupByNo(rs));
+				}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return lists;
+	}
 
 	private Employee getEmployeeGroupByNo(ResultSet rs) throws SQLException {
 		int empNo = rs.getInt("e.emp_no");
 		String empName = rs.getString("e.emp_name");
-		Title title = new Title(rs.getInt("e.title"));
-		Employee manager = rs.getInt("e.manager")==0?null:new Employee(rs.getInt("e.manager"));
-		manager.setEmpName(rs.getString("e2.emp_name")!=null?rs.getString("e2.emp_name"):null);
+		Title title = new Title(rs.getInt("t.title_no"));
+		title.setTitleName(rs.getString("t.title_name"));
+		Employee manager = rs.getInt("e.manager")==0?new Employee():new Employee(rs.getInt("e.manager"));
+		LogUtil.prnLog(rs.getString("e2.emp_name"));
+		manager.setEmpName(rs.getString("e2.emp_name")==null?null:rs.getString("e2.emp_name"));
 		int salary = rs.getInt("salary");
 		Department dept = new Department(rs.getInt("e.dept"));
-		dept.setDeptName(rs.getString("dept_name")!=null?rs.getString("dept_name"):null);
+		dept.setDeptName(rs.getString("dept_name"));
 		Date hireDate = rs.getTimestamp("e.hire_date");
 		Employee emp = new Employee(empNo, empName, title, manager, salary, dept, hireDate);
-		isPic = emp.getPic()==null?false:true;
-		if(isPic) {
-			byte[] pic = rs.getBytes("e.pic")==null?null:rs.getBytes("e.pic");
-			emp.setPic(pic);
-		}
+		emp.setPic(rs.getBytes("e.pic")==null?null:rs.getBytes("e.pic"));
 		return emp;
 	}
 

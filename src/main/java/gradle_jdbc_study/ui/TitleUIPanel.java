@@ -11,6 +11,7 @@ import javax.swing.JPopupMenu;
 
 import gradle_jdbc_study.dto.Title;
 import gradle_jdbc_study.ui.content.TitlePanel;
+import gradle_jdbc_study.ui.exception.InvalidCheckExcepation;
 import gradle_jdbc_study.ui.list.AbsTblPanel;
 import gradle_jdbc_study.ui.list.TitleTblPanel;
 import gradle_jdbc_study.ui.service.TitleUIService;
@@ -20,9 +21,9 @@ public class TitleUIPanel extends AbsMainPanel<Title> {
 	private TitlePanel titlePanel;
 	private TitleTblPanel titleTblPanel;
 	private TitleUIService service;
-
+	private DlgEmployee dialog;
 	public TitleUIPanel() {
-
+		dialog = new DlgEmployee();
 	}
 
 	@Override
@@ -80,11 +81,15 @@ public class TitleUIPanel extends AbsMainPanel<Title> {
 					
 				}
 				if(e.getActionCommand().equals("추가")) {
-					itemList.add(titlePanel.getItem());
-					titleTblPanel.loadData(itemList);
 					try {
+						itemList.add(titlePanel.getItem());
+						titleTblPanel.loadData(itemList);
 						service.insertTitle(titlePanel.getItem());
-					} catch (SQLException e1) {
+					} 
+					catch (InvalidCheckExcepation e1) {
+						JOptionPane.showMessageDialog(null, e1.getMessage());
+					}
+					catch (SQLException e1) {
 						if(e1.getErrorCode()==1062) {
 							JOptionPane.showMessageDialog(null, "부서 번호가 중복");
 						}
@@ -107,6 +112,7 @@ public class TitleUIPanel extends AbsMainPanel<Title> {
 	protected void initPopMenu() {
 		JMenuItem updateItem = new JMenuItem("수정");
 		JMenuItem deleteItem = new JMenuItem("삭제");
+		JMenuItem selectItem = new JMenuItem("직책별 사원 보기");
 		ActionListener popListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -126,12 +132,24 @@ public class TitleUIPanel extends AbsMainPanel<Title> {
 					titlePanel.setItem(titleTblPanel.getSelectedItem());
 					btnAdd.setText("수정");
 				}
+				else {
+					try {
+						dialog.setEmpList(service.showTitleByNo(titleTblPanel.getSelectedItem()));
+						dialog.setTitle(titleTblPanel.getSelectedItem().getTitleName() + " 직책");
+					} catch (SQLException e2) {
+						System.out.println(e2.getMessage());
+					}
+					dialog.setModal(true);
+					dialog.setVisible(true);
+				}
 			}
 		};
 		deleteItem.addActionListener(popListener);
 		updateItem.addActionListener(popListener);
+		selectItem.addActionListener(popListener);
 		popMenu.add(updateItem);
 		popMenu.add(deleteItem);	
+		popMenu.add(selectItem);
 	}
 
 }

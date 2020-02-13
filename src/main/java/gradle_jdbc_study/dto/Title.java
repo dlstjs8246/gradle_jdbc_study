@@ -27,7 +27,7 @@ public class Title {
 	}
 	@Override
 	public String toString() {
-		return "Title [titleNo=" + titleNo + ", titleName=" + titleName + "]";
+		return String.format("%s(%d)", titleName,titleNo);
 	}
 	@Override
 	public int hashCode() {
